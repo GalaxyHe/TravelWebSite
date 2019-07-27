@@ -1,6 +1,9 @@
 # TravelWebSite
 
-基于HTML(Ajax、JQuery)+JDBC Template+Servlet
+前端：HTML+CSS+JQuery
+前后端数据交互使用Ajax+JSON
+后端：Servlet+JDBC Template
+数据库采用MySQL+Redis
 
 项目缘由：之前一直在使用SSM框架，包括学期末两次课程设计，都是使用的SSM框架完成的。想着假期做个原生mvc模式的项目。
 
