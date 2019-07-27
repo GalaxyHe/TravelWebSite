@@ -1,0 +1,105 @@
+<!-- 头部 start -->
+<script src="js/getParameter.js"></script>
+<script src="js/jquery-3.3.1.js"></script>
+<script>
+    //页面载入事件
+    $(function () {
+        //直接发送一个异步get提交
+        $.get("user/findUser",{},function (data) {
+            //接收服务器响应过来的User的姓名{uid:xx,username:xx,password:xx,name:'张三'}
+            var  msg = "欢迎回来,"+data.name ;
+            $("#span_username").html(msg) ;
+        }) ;
+
+        //如果用户已经登录，自动隐藏登录标签
+        $.get("user/findUser",{},function (flag) {
+           if(flag){
+               $("#login_status").hide();
+           }else {
+               //用户未登录，就不显示“我的收藏”
+               $("#mycol").hide();
+           }
+        });
+
+
+        //发送ajax,加载index.html的时候,应该从后台查询数据库获取分类信息
+        $.get("category/findAll",{},function (data) {
+            //data:list集合
+            var lis = "" ;
+            lis += ' <li class="nav-active"><a href="index.html">首页</a></li>' ;
+            for(var i = 0 ; i < data.length;i++){
+                //点击分类信息的时候,执行跳转到列表页面,应该传递分类id(cid)
+                lis+='<li><a href="route_list.html?cid='+data[i].cid+'">'+data[i].cname+'</a></li>' ;
+            }
+
+            lis += '<li><a href="favoriterank.html">收藏排行榜</a></li>' ;
+
+            //将lis的信息作为ul标签的子标签(文本内容)
+            $("#category").html(lis) ;
+
+        }) ;
+
+        //点击搜索,根据旅游线路名称模糊查询
+        $("#search-button").click(function () {
+
+            //获取当前cid的内容
+            var cid =  getParameter("cid") ;
+            //alert(cid) ;
+
+            var rname = $("#search_input").val() ;
+            //alert(rname) ;
+
+            //将rname:旅游线路名称将信息拼接到
+           location.href="http://localhost:8080/travelsite/route_list.html?cid="+cid+"&rname="+rname ;
+        }) ;
+    }) ;
+
+
+
+</script>
+<header id="header">
+        <div class="top_banner">
+            <img src="images/biaozhi.jpg" style="width: 1500px;height:128px " alt="">
+        </div>
+        <div class="shortcut">
+            <!-- 未登录状态  -->
+            <div class="login_out">
+                <a href="login.html" id="login_status">登录</a>
+                <a href="register.html">注册</a>
+            </div>
+
+            <!-- 登录状态  -->
+            <div class="login">
+                <span id="span_username"></span>
+                <a href="myfavorite.html" class="collection" id="mycol">我的收藏</a>
+                <a href="javascript:location.href='user/exit';">退出</a>
+            </div>
+        </div>
+        <div class="header_wrap">
+            <div class="topbar">
+                <div class="logo">
+                    <a href="#"><img src="images/logo.jpg" style="width: 207px;height:70px " alt=""></a>
+                </div>
+                <div class="search">
+                    <input name="" type="text" id="search_input" placeholder="请输入路线名称" class="search_input" autocomplete="off">
+                    <a href="javascript:;" id="search-button" class="search-button">搜索</a>
+                </div>
+                <div class="hottel">
+                    <div class="hot_pic">
+                        <img src="images/hot_tel.jpg" alt="">
+                    </div>
+                    <div class="hot_tel">
+                        <p class="hot_time">客服热线(9:00-6:00)</p>
+                        <p class="hot_num">400-618-9090</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- 头部 end -->
+     <!-- 首页导航 -->
+    <div class="navitem">
+        <ul id="category" class="nav">
+        </ul>
+    </div>
+    
